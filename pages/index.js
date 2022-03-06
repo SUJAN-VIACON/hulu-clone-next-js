@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
   const { genre } = context.query;
   const request = await axios(
     `https://api.themoviedb.org/3${
-      requests[genre].url || requests.fetchTranding.url
+      requests[genre || "fetchTranding"].url || requests.fetchTranding.url
     }`
   );
   const movie = request.data.results;
