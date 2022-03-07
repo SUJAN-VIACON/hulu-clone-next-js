@@ -5,10 +5,7 @@ import { forwardRef } from "react/cjs/react.production.min";
 const Thumbnail = forwardRef(({ result }, ref) => {
   const BASE_PATH = "https://www.themoviedb.org/t/p/original";
   return (
-    <div
-      ref={ref}
-      className="group cursor-pointer p-2 transition duration-200 ease-in transform sm:hover:scale-105 hover:z-50"
-    >
+    <div ref={ref} className="group cursor-pointer p-2 ">
       <Image
         layout="responsive"
         src={
@@ -17,7 +14,7 @@ const Thumbnail = forwardRef(({ result }, ref) => {
         }
         height={1080}
         width={1920}
-        className=" rounded object-cover"
+        className=" rounded object-cover transition duration-200 ease-in transform sm:hover:scale-105"
       />
 
       <div>
