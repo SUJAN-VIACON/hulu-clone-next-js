@@ -39,7 +39,7 @@ export async function getStaticPaths() {
     params: { genre: genre.name },
   }));
 
-  return { paths, fallback: true };
+  return { paths, fallback: "blocking" };
 }
 
 async function getGenres() {
@@ -48,7 +48,7 @@ async function getGenres() {
   );
   const data = await res.json();
 
-  return data.genres;
+  return data?.genres ?? [];
 }
 
 async function getMovies(id) {
@@ -57,5 +57,5 @@ async function getMovies(id) {
   );
   const data = await res.json();
 
-  return data.results;
+  return data?.results ?? [];
 }
