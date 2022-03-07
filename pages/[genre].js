@@ -21,14 +21,25 @@ export default function Home({ movies, genres }) {
   );
 }
 
-export async function getStaticProps() {
-  const movies = await getMovies();
+export async function getStaticProps(context) {
+  const genre = context.params.genre;
   const genres = await getGenres();
-
+  const currentGenre = genres.filter((g) => g.name == genre)[0];
+  const movies = await getMovies(currentGenre.id);
   return {
     props: { movies, genres },
     revalidate: 60 * 60 * 24,
   };
+}
+
+export async function getStaticPaths() {
+  const genres = await getGenres();
+
+  const paths = genres.map((genre) => ({
+    params: { genre: genre.name },
+  }));
+
+  return { paths, fallback: true };
 }
 
 async function getGenres() {
@@ -40,15 +51,10 @@ async function getGenres() {
   return data.genres;
 }
 
-async function getMovies(id = null) {
-  const url = `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2&language=en-US&page=1`;
-
-  if (id) {
-    url += `&with_genres=${id}`;
-  }
-
-  const res = await fetch(url);
-
+async function getMovies(id) {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2&with_genres=${id}&language=en-US&page=1`
+  );
   const data = await res.json();
 
   return data.results;

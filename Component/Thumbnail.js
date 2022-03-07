@@ -17,7 +17,7 @@ const Thumbnail = forwardRef(({ result }, ref) => {
         }
         height={1080}
         width={1920}
-        className=" rounded object-fill"
+        className=" rounded object-cover"
       />
 
       <div>
