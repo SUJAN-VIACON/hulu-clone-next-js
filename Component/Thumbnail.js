@@ -1,11 +1,18 @@
 import { ThumbUpIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { forwardRef } from "react/cjs/react.production.min";
+import { useRouter } from "next/router";
 
 const Thumbnail = forwardRef(({ result }, ref) => {
   const BASE_PATH = "https://www.themoviedb.org/t/p/original";
+  const router = useRouter();
+  const path = result.id;
   return (
-    <div ref={ref} className="group cursor-pointer p-2 ">
+    <div
+      ref={ref}
+      className="group cursor-pointer p-2 "
+      onClick={() => router.push(`/Movie/Action?${path}`)}
+    >
       <Image
         layout="responsive"
         src={

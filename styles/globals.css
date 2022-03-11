@@ -7,3 +7,12 @@
     @apply bg-[#06202A] text-gray-300;
   }
 }
+
+@layer components {
+  .linier-background {
+    
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 09) 150px, rgba(0, 0, 0, 0.5) 100%);
+
+  }
+  /* ... */
+}
