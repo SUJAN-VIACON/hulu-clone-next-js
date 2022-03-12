@@ -1,20 +1,24 @@
 import Image from "next/image";
 import Header from "../../Component/Header";
 import { PlayIcon } from "@heroicons/react/outline";
+import Nav from "../../Component/Nav";
+import RelatedMovie from "../../Component/RelatedMovie";
 
-export default function Movies({ movie }) {
+export default function Movies({ movie, genres, relatedMovies }) {
   const BASE_PATH = "https://www.themoviedb.org/t/p/original";
 
-  if (!movie) {
+  if (!movie && !genres) {
     return <p>Movie not found</p>;
   }
+
+  console.log();
 
   return (
     <div>
       <Header />
-      {/* <Nav genres={genres} /> */}
+      <Nav genres={genres} />
 
-      <div className="  relative">
+      <div className="  relative mt-10">
         <Image
           src={
             `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
@@ -23,9 +27,9 @@ export default function Movies({ movie }) {
           height={800}
           width={3000}
           objectFit="cover"
-          className=" object-cover rounded-xl sm:h-100"
+          className=" object-cover rounded-xl "
         />
-        <div className="linier-background flex sm:flex-row mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
+        <div className="linier-background xl:flex mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
           <Image
             src={
               `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
@@ -37,24 +41,25 @@ export default function Movies({ movie }) {
             className=" object-cover rounded"
           />
           <div className="mx-10">
-            <h3 className=" text-4xl text-white font-bold">
+            <h3 className=" xl:text-4xl text-2xl font-bold ">
               {movie.title || movie.original_name}
             </h3>
-            <p className=" text-lg text-white">
+            <p className=" text-lg mt-2">
               12/17/2021 (IN) Action, Adventure, Science Fiction 2h 28m
             </p>
-            <div className="flex">
-              <PlayIcon className="w-20 text-white my-3 text-green-600" />
-              <p className="text-white flex items-center mx-3 font-bold">
-                Play Now
-              </p>
+            <div className="flex my-5">
+              <a href={movie.homepage}>
+                <PlayIcon className="w-20  my-3 text-green-600" />
+              </a>
+              <p className=" flex items-center mx-3 font-bold">Play Now</p>
             </div>
 
-            <h4 className="text-xl text-white font-bold">Overview</h4>
-            <p className="text-white">{movie.overview}</p>
+            <h4 className="text-xl  font-bold">Overview</h4>
+            <p className="mt-2">{movie.overview}</p>
           </div>
         </div>
       </div>
+      <RelatedMovie relatedMovies={relatedMovies} />
     </div>
   );
 }
@@ -62,18 +67,28 @@ export default function Movies({ movie }) {
 export async function getStaticProps(context) {
   const movieId = context.params.movie;
   let movie = null;
+  let genres = null;
+  let relatedMovies = null;
+
   try {
     movie = await getMovie(movieId);
+    genres = await getGenres();
+    relatedMovies = await getRelatedMovie(movie.genres[0].id);
   } catch {}
 
   return {
-    props: { movie },
+    props: { movie, genres, relatedMovies },
     revalidate: 60 * 60 * 24,
   };
 }
 
 export async function getStaticPaths() {
-  const movies = await getPopularMovies();
+  let movies = null;
+  try {
+    movies = await getPopularMovies();
+  } catch {}
+
+  if (!movies) return { paths: [], fallback: true };
 
   const paths = movies.map((movie) => ({
     params: { movie: movie.id.toString() },
@@ -88,7 +103,7 @@ async function getGenres() {
   );
   const data = await res.json();
 
-  return data?.genres ?? [];
+  return data.genres;
 }
 
 async function getPopularMovies() {
@@ -107,4 +122,13 @@ async function getMovie(id) {
   const data = await res.json();
 
   return data ?? null;
+}
+
+async function getRelatedMovie(id) {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2&with_genres=${id}&language=en-US&page=1`
+  );
+  const data = await res.json();
+
+  return data?.results ?? [];
 }

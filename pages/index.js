@@ -4,6 +4,9 @@ import Nav from "../Component/Nav";
 import Results from "../Component/Results";
 
 export default function Home({ movies, genres }) {
+  if (!genres && !movies) {
+    return <p>Loading...</p>;
+  }
   return (
     <div>
       <Head>
@@ -22,8 +25,12 @@ export default function Home({ movies, genres }) {
 }
 
 export async function getStaticProps() {
-  const movies = await getMovies();
-  const genres = await getGenres();
+  let movies = null;
+  let genres = null;
+  try {
+    movies = await getMovies();
+    genres = await getGenres();
+  } catch {}
 
   return {
     props: { movies, genres },
