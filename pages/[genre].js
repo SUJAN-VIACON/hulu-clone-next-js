@@ -4,6 +4,9 @@ import Nav from "../Component/Nav";
 import Results from "../Component/Results";
 
 export default function Home({ movies, genres }) {
+  if (!genres && !movies) {
+    return <p>Loading...</p>;
+  }
   return (
     <div>
       <Head>
@@ -22,10 +25,19 @@ export default function Home({ movies, genres }) {
 }
 
 export async function getStaticProps(context) {
-  const genre = context.params.genre;
-  const genres = await getGenres();
-  const currentGenre = genres.filter((g) => g.name == genre)[0];
-  const movies = await getMovies(currentGenre.id);
+  let genres = null;
+  let movies = null;
+  let genre = context.params.genre;
+  try {
+    genres = await getGenres();
+  } catch {}
+
+  let currentGenre = genres.filter((g) => g.name == genre)[0];
+
+  try {
+    movies = await getMovies(currentGenre.id);
+  } catch {}
+
   return {
     props: { movies, genres },
     revalidate: 60 * 60 * 24,
@@ -33,7 +45,13 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  const genres = await getGenres();
+  let genres = null;
+
+  try {
+    genres = await getGenres();
+  } catch {}
+
+  if (!genres) return { paths: [], fallback: true };
 
   const paths = genres.map((genre) => ({
     params: { genre: genre.name },
