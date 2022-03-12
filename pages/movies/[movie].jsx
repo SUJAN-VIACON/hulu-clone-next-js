@@ -5,6 +5,10 @@ import { PlayIcon } from "@heroicons/react/outline";
 export default function Movies({ movie }) {
   const BASE_PATH = "https://www.themoviedb.org/t/p/original";
 
+  if (!movie) {
+    return <p>Movie not found</p>;
+  }
+
   return (
     <div>
       <Header />
@@ -57,7 +61,10 @@ export default function Movies({ movie }) {
 
 export async function getStaticProps(context) {
   const movieId = context.params.movie;
-  const movie = await getMovie(movieId);
+  let movie = null;
+  try {
+    movie = await getMovie(movieId);
+  } catch {}
 
   return {
     props: { movie },
@@ -99,5 +106,5 @@ async function getMovie(id) {
   );
   const data = await res.json();
 
-  return data;
+  return data ?? null;
 }
