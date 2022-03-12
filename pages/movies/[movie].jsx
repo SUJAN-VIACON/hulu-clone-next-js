@@ -1,20 +1,20 @@
 import Image from "next/image";
-import Hearder from "../../Component/Hearder";
+import Header from "../../Component/Header";
 import { PlayIcon } from "@heroicons/react/outline";
-import { useRouter } from "next/router";
+
 export default function Movies({ movie }) {
-  const result = movie[0];
   const BASE_PATH = "https://www.themoviedb.org/t/p/original";
+
   return (
     <div>
-      <Hearder />
+      <Header />
       {/* <Nav genres={genres} /> */}
 
       <div className="  relative">
         <Image
           src={
-            `${BASE_PATH}${result.poster_path || result.backdrop_path}` ||
-            `${BASE_PATH}${result.poster_path}`
+            `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
+            `${BASE_PATH}/${movie.poster_path}`
           }
           height={800}
           width={3000}
@@ -24,8 +24,8 @@ export default function Movies({ movie }) {
         <div className="linier-background flex sm:flex-row mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
           <Image
             src={
-              `${BASE_PATH}${result.poster_path || result.backdrop_path}` ||
-              `${BASE_PATH}${result.poster_path}`
+              `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
+              `${BASE_PATH}/${movie.poster_path}`
             }
             height={400}
             width={500}
@@ -34,7 +34,7 @@ export default function Movies({ movie }) {
           />
           <div className="mx-10">
             <h3 className=" text-4xl text-white font-bold">
-              Spider-Man: No Way Home ({result.id})
+              {movie.title || movie.original_name}
             </h3>
             <p className=" text-lg text-white">
               12/17/2021 (IN) Action, Adventure, Science Fiction 2h 28m
@@ -47,12 +47,7 @@ export default function Movies({ movie }) {
             </div>
 
             <h4 className="text-xl text-white font-bold">Overview</h4>
-            <p className="text-white">
-              Peter Parker is unmasked and no longer able to separate his normal
-              life from the high-stakes of being a super-hero. When he asks for
-              help from Doctor Strange the stakes become even more dangerous,
-              forcing him to discover what it truly means to be Spider-Man.
-            </p>
+            <p className="text-white">{movie.overview}</p>
           </div>
         </div>
       </div>
@@ -61,11 +56,8 @@ export default function Movies({ movie }) {
 }
 
 export async function getStaticProps(context) {
-  const movie = await getMovies(28);
-
-  // const movie = movies.filter(
-  //   (movie) => movie.id == parseInt(context.params.Movie)[0]
-  // );
+  const movieId = context.params.movie;
+  const movie = await getMovie(movieId);
 
   return {
     props: { movie },
@@ -74,23 +66,14 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  const movies = await getMovies(28);
+  const movies = await getPopularMovies();
 
   const paths = movies.map((movie) => ({
-    params: { Movie: movie.id.toString() },
+    params: { movie: movie.id.toString() },
   }));
 
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: true };
 }
-
-// export async function getStaticPaths() {
-//   return {
-//     fallback: false,
-//     pages: [
-//       { params: { pathSegment }, query: { getParam } },
-//     ],
-//   }
-// }
 
 async function getGenres() {
   const res = await fetch(
@@ -101,11 +84,20 @@ async function getGenres() {
   return data?.genres ?? [];
 }
 
-async function getMovies(id) {
+async function getPopularMovies() {
   const res = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2&with_genres=${id}&language=en-US&page=1`
+    `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2`
   );
   const data = await res.json();
 
   return data?.results ?? [];
+}
+
+async function getMovie(id) {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}?api_key=32617012bea77a3729ee98ea76ff44a2`
+  );
+  const data = await res.json();
+
+  return data;
 }

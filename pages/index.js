@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Hearder from "../Component/Hearder";
+import Header from "../Component/Header";
 import Nav from "../Component/Nav";
 import Results from "../Component/Results";
 
@@ -14,7 +14,7 @@ export default function Home({ movies, genres }) {
           href="https://assetshuluimcom-a.akamaihd.net/h3o/facebook_share_thumb_default_hulu.jpg"
         />
       </Head>
-      <Hearder />
+      <Header />
       <Nav genres={genres} />
       <Results results={movies} />
     </div>
