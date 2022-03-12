@@ -47,7 +47,9 @@ export default function Movies({ movie, genres, relatedMovies }) {
               {movie.title || movie.original_name}
             </h3>
             <p className=" text-lg mt-2">
-              12/17/2021 (IN) Action, Adventure, Science Fiction 2h 28m
+              {movie.media_type && `${movie.media_type} *`}{" "}
+              {movie.release_date || movie.first_air_date} *{""} (IN) Action,
+              Adventure, Science Fiction 2h 28m
             </p>
             <div className="flex my-5">
               <a href={movie.homepage}>
