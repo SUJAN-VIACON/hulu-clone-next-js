@@ -18,18 +18,20 @@ export default function Movies({ movie, genres, relatedMovies }) {
       <Header />
       <Nav genres={genres} />
 
-      <div className="  relative mt-10">
-        <Image
-          src={
-            `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
-            `${BASE_PATH}/${movie.poster_path}`
-          }
-          height={800}
-          width={3000}
-          objectFit="cover"
-          className=" object-cover rounded-xl "
-        />
-        <div className="linier-background xl:flex mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
+      <div className="relative mt-10">
+        <div className="back-ground-image">
+          <Image
+            src={
+              `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
+              `${BASE_PATH}/${movie.poster_path}`
+            }
+            layout="fill"
+            objectFit="cover"
+            className=" object-cover rounded-xl "
+          />
+        </div>
+
+        <div className="inner-content linier-background xl:flex mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
           <Image
             src={
               `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
@@ -40,7 +42,7 @@ export default function Movies({ movie, genres, relatedMovies }) {
             objectFit="cover"
             className=" object-cover rounded"
           />
-          <div className="mx-10">
+          <div className="mx-10 inner-info">
             <h3 className=" xl:text-4xl text-2xl font-bold ">
               {movie.title || movie.original_name}
             </h3>
