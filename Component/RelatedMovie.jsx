@@ -1,7 +1,6 @@
 import Thumbnail from "./Thumbnail";
 
 const RelatedMovie = (relatedMovies) => {
-  console.log(relatedMovies);
   if (!relatedMovies) {
     return <p>Movie not found</p>;
   }
