@@ -8,13 +8,16 @@ const Nav = ({ genres }) => {
         <div className=" flex px-10 text-2xl sm:px-20 whitespace-nowrap space-x-10 sm:space-x-20 overflow-x-scroll scrollbar-hide">
           {genres.map((genre) => {
             return (
-              <h2
-                key={genre.id}
-                onClick={() => router.push(`/${genre.name}`)}
-                className=" last:pr-24 cursor-pointer transition duration-100 transform hover:scale-125 hover:text-white active:text-red-500"
-              >
-                {genre.name}
-              </h2>
+              <Link href={`/${genre.name}`}>
+                <a>
+                  <h2
+                    key={genre.id}
+                    className=" last:pr-24 cursor-pointer transition duration-100 transform hover:scale-125 hover:text-white active:text-red-500"
+                  >
+                    {genre.name}
+                  </h2>
+                </a>
+              </Link>
             );
           })}
         </div>
