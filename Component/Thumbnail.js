@@ -8,15 +8,17 @@ const Thumbnail = forwardRef(({ result: movie }, ref) => {
   const BASE_PATH = "https://www.themoviedb.org/t/p/original";
   const router = useRouter();
   const path = movie.id;
+  const imageURL =
+    `${BASE_PATH}${movie.poster_path || movie.backdrop_path}` ||
+    `${BASE_PATH}${movie.poster_path}`;
   return (
     <Link href={`/movies/${path}`}>
       <a className="group cursor-pointer p-2 ">
         <Image
+          placeholder="blur"
+          blurDataURL={`/_next/image?url=${imageURL}&w=16&q=1`}
           layout="responsive"
-          src={
-            `${BASE_PATH}${movie.poster_path || movie.backdrop_path}` ||
-            `${BASE_PATH}${movie.poster_path}`
-          }
+          src={imageURL}
           height={1080}
           width={1920}
           className=" rounded object-cover transition duration-200 ease-in transform sm:hover:scale-105"
