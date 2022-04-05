@@ -1,7 +1,6 @@
-import { useRouter } from "next/router";
-import requests from "../requests";
+import Link from "next/link";
+
 const Nav = ({ genres }) => {
-  const router = useRouter();
   return (
     <div>
       <nav className=" relative">
@@ -9,13 +8,11 @@ const Nav = ({ genres }) => {
           {genres.map((genre) => {
             return (
               <Link href={`/${genre.name}`}>
-                <a>
-                  <h2
-                    key={genre.id}
-                    className=" last:pr-24 cursor-pointer transition duration-100 transform hover:scale-125 hover:text-white active:text-red-500"
-                  >
-                    {genre.name}
-                  </h2>
+                <a
+                  key={genre.id}
+                  className=" last:pr-24 cursor-pointer transition duration-100 transform hover:scale-125 hover:text-white active:text-red-500"
+                >
+                  <h2>{genre.name}</h2>
                 </a>
               </Link>
             );
