@@ -11,7 +11,9 @@ export default function Movies({ movie, genres, relatedMovies }) {
     return <p>Movie not found</p>;
   }
 
-  console.log();
+  const imageURL =
+    `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
+    `${BASE_PATH}/${movie.poster_path}`;
 
   return (
     <div>
@@ -21,10 +23,9 @@ export default function Movies({ movie, genres, relatedMovies }) {
       <div className="relative mt-10">
         <div className="back-ground-image">
           <Image
-            src={
-              `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
-              `${BASE_PATH}/${movie.poster_path}`
-            }
+            placeholder="blur"
+            blurDataURL={`/_next/image?url=${imageURL}&w=16&q=1`}
+            src={imageURL}
             layout="fill"
             objectFit="cover"
             className=" object-cover rounded-xl "
@@ -33,10 +34,9 @@ export default function Movies({ movie, genres, relatedMovies }) {
 
         <div className="inner-content linier-background xl:flex mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
           <Image
-            src={
-              `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
-              `${BASE_PATH}/${movie.poster_path}`
-            }
+            placeholder="blur"
+            blurDataURL={`/_next/image?url=${imageURL}&w=16&q=1`}
+            src={imageURL}
             height={400}
             width={500}
             objectFit="cover"
