@@ -14,8 +14,8 @@ const Thumbnail = forwardRef(({ result: movie }, ref) => {
           src={movie.imageUrl}
           placeholder="blur"
           blurDataURL={movie.blurImageUrl}
-          height={1080}
-          width={1920}
+          height={340}
+          width={605}
           className="rounded object-cover transition duration-200 ease-in transform sm:hover:scale-105"
         />
 

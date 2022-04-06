@@ -12,10 +12,6 @@ export default function Movies({ movie, genres, relatedMovies }) {
     return <p>Movie not found</p>;
   }
 
-  const imageURL =
-    `${BASE_PATH}/${movie.poster_path || movie.backdrop_path}` ||
-    `${BASE_PATH}/${movie.poster_path}`;
-
   return (
     <div>
       <Header />
