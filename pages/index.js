@@ -2,6 +2,7 @@ import Head from "next/head";
 import Header from "../Component/Header";
 import Nav from "../Component/Nav";
 import Results from "../Component/Results";
+import api from "../Services/api";
 
 export default function Home({ movies, genres }) {
   if (!genres && !movies) {
@@ -28,35 +29,12 @@ export async function getStaticProps() {
   let movies = null;
   let genres = null;
   try {
-    movies = await getMovies();
-    genres = await getGenres();
+    movies = await api.getMovies();
+    genres = await api.getGenres();
   } catch {}
 
   return {
     props: { movies, genres },
     revalidate: 60 * 60 * 24,
   };
-}
-
-async function getGenres() {
-  const res = await fetch(
-    "https://api.themoviedb.org/3/genre/movie/list?api_key=32617012bea77a3729ee98ea76ff44a2"
-  );
-  const data = await res.json();
-
-  return data.genres;
-}
-
-async function getMovies(id = null) {
-  const url = `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2&language=en-US&page=1`;
-
-  if (id) {
-    url += `&with_genres=${id}`;
-  }
-
-  const res = await fetch(url);
-
-  const data = await res.json();
-
-  return data.results;
 }

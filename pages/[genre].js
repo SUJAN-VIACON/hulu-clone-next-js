@@ -2,6 +2,7 @@ import Head from "next/head";
 import Header from "../Component/Header";
 import Nav from "../Component/Nav";
 import Results from "../Component/Results";
+import api from "../Services/api";
 
 export default function Home({ movies, genres }) {
   if (!genres && !movies) {
@@ -29,13 +30,13 @@ export async function getStaticProps(context) {
   let movies = null;
   let genre = context.params.genre;
   try {
-    genres = await getGenres();
+    genres = await api.getGenres();
   } catch {}
 
   let currentGenre = genres.filter((g) => g.name == genre)[0];
 
   try {
-    movies = await getMovies(currentGenre.id);
+    movies = await api.getMovies(currentGenre.id);
   } catch {}
 
   return {
@@ -48,7 +49,7 @@ export async function getStaticPaths() {
   let genres = null;
 
   try {
-    genres = await getGenres();
+    genres = await api.getGenres();
   } catch {}
 
   if (!genres) return { paths: [], fallback: true };
@@ -58,22 +59,4 @@ export async function getStaticPaths() {
   }));
 
   return { paths, fallback: "blocking" };
-}
-
-async function getGenres() {
-  const res = await fetch(
-    "https://api.themoviedb.org/3/genre/movie/list?api_key=32617012bea77a3729ee98ea76ff44a2"
-  );
-  const data = await res.json();
-
-  return data?.genres ?? [];
-}
-
-async function getMovies(id) {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2&with_genres=${id}&language=en-US&page=1`
-  );
-  const data = await res.json();
-
-  return data?.results ?? [];
 }

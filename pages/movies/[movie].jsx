@@ -3,6 +3,7 @@ import Header from "../../Component/Header";
 import { PlayIcon } from "@heroicons/react/outline";
 import Nav from "../../Component/Nav";
 import RelatedMovie from "../../Component/RelatedMovie";
+import api from "../../Services/api";
 
 export default function Movies({ movie, genres, relatedMovies }) {
   const BASE_PATH = "https://www.themoviedb.org/t/p/original";
@@ -24,8 +25,8 @@ export default function Movies({ movie, genres, relatedMovies }) {
         <div className="back-ground-image">
           <Image
             placeholder="blur"
-            blurDataURL={`/_next/image?url=${imageURL}&w=16&q=1`}
             src={imageURL}
+            blurDataURL={movie.blurImageUrl}
             layout="fill"
             objectFit="cover"
             className=" object-cover rounded-xl "
@@ -35,8 +36,8 @@ export default function Movies({ movie, genres, relatedMovies }) {
         <div className="inner-content linier-background xl:flex mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
           <Image
             placeholder="blur"
-            blurDataURL={`/_next/image?url=${imageURL}&w=16&q=1`}
             src={imageURL}
+            blurDataURL={movie.blurImageUrl}
             height={400}
             width={500}
             objectFit="cover"
@@ -75,9 +76,9 @@ export async function getStaticProps(context) {
   let relatedMovies = null;
 
   try {
-    movie = await getMovie(movieId);
-    genres = await getGenres();
-    relatedMovies = await getRelatedMovie(movie.genres[0].id);
+    movie = await api.getMovie(movieId);
+    genres = await api.getGenres();
+    relatedMovies = await api.getRelatedMovie(movie.genres[0].id);
   } catch {}
 
   return {
@@ -89,7 +90,7 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   let movies = null;
   try {
-    movies = await getPopularMovies();
+    movies = await api.getPopularMovies();
   } catch {}
 
   if (!movies) return { paths: [], fallback: true };
@@ -99,40 +100,4 @@ export async function getStaticPaths() {
   }));
 
   return { paths, fallback: true };
-}
-
-async function getGenres() {
-  const res = await fetch(
-    "https://api.themoviedb.org/3/genre/movie/list?api_key=32617012bea77a3729ee98ea76ff44a2"
-  );
-  const data = await res.json();
-
-  return data.genres;
-}
-
-async function getPopularMovies() {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2`
-  );
-  const data = await res.json();
-
-  return data?.results ?? [];
-}
-
-async function getMovie(id) {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/${id}?api_key=32617012bea77a3729ee98ea76ff44a2`
-  );
-  const data = await res.json();
-
-  return data ?? null;
-}
-
-async function getRelatedMovie(id) {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=32617012bea77a3729ee98ea76ff44a2&with_genres=${id}&language=en-US&page=1`
-  );
-  const data = await res.json();
-
-  return data?.results ?? [];
 }

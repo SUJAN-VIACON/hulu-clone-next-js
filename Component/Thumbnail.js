@@ -1,22 +1,19 @@
 import { ThumbUpIcon } from "@heroicons/react/outline";
 import { forwardRef } from "react/cjs/react.production.min";
-import { useRouter } from "next/router";
 import Link from "next/link";
-import BlurImage from "./BlurImage";
+import Image from "next/image";
 
 const Thumbnail = forwardRef(({ result: movie }, ref) => {
-  const BASE_PATH = "https://www.themoviedb.org/t/p/original";
-  const router = useRouter();
   const path = movie.id;
-  const imageURL =
-    `${BASE_PATH}${movie.poster_path || movie.backdrop_path}` ||
-    `${BASE_PATH}${movie.poster_path}`;
+
   return (
     <Link href={`/movies/${path}`}>
       <a className="group cursor-pointer p-2 ">
-        <BlurImage
+        <Image
           layout="responsive"
-          src={imageURL}
+          src={movie.imageUrl}
+          placeholder="blur"
+          blurDataURL={movie.blurImageUrl}
           height={1080}
           width={1920}
           className="rounded object-cover transition duration-200 ease-in transform sm:hover:scale-105"
