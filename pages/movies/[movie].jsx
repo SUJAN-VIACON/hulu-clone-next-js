@@ -6,8 +6,6 @@ import RelatedMovie from "../../Component/RelatedMovie";
 import api from "../../Services/api";
 
 export default function Movies({ movie, genres, relatedMovies }) {
-  const BASE_PATH = "https://www.themoviedb.org/t/p/original";
-
   if (!movie && !genres) {
     return <p>Movie not found</p>;
   }
@@ -21,7 +19,7 @@ export default function Movies({ movie, genres, relatedMovies }) {
         <div className="back-ground-image">
           <Image
             placeholder="blur"
-            src={imageURL}
+            src={movie.imageURL}
             blurDataURL={movie.blurImageUrl}
             layout="fill"
             objectFit="cover"
@@ -32,7 +30,7 @@ export default function Movies({ movie, genres, relatedMovies }) {
         <div className="inner-content linier-background xl:flex mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
           <Image
             placeholder="blur"
-            src={imageURL}
+            src={movie.imageURL}
             blurDataURL={movie.blurImageUrl}
             height={400}
             width={500}
