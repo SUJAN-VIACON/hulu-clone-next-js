@@ -10,6 +10,8 @@ export default function Movies({ movie, genres, relatedMovies }) {
     return <p>Movie not found</p>;
   }
 
+  // console.log(movie);
+
   return (
     <div>
       <Header />
@@ -19,7 +21,7 @@ export default function Movies({ movie, genres, relatedMovies }) {
         <div className="back-ground-image">
           <Image
             placeholder="blur"
-            src={movie.imageURL}
+            src={movie.imageUrl}
             blurDataURL={movie.blurImageUrl}
             layout="fill"
             objectFit="cover"
@@ -30,7 +32,7 @@ export default function Movies({ movie, genres, relatedMovies }) {
         <div className="inner-content linier-background xl:flex mx-20x px-16 py-5 absolute top-0 bottom-0 left-0 right-0">
           <Image
             placeholder="blur"
-            src={movie.imageURL}
+            src={movie.imageUrl}
             blurDataURL={movie.blurImageUrl}
             height={400}
             width={500}
